@@ -43,6 +43,9 @@ class ShopController < ApplicationController
     if user_id.length > 30 || password.length > 30 || username.length > 30
       raise 'ユーザーID，パスワード，ユーザー名のいずれかが長すぎます（30文字以内にしてください）'
     end
+    if user_id.match(/\w+/).nil?
+      raise 'ユーザーIDに半角英数字以外の文字列が含まれています'
+    end
     if user_id.present? && password.present? && username.present?
       if User.exists?(user_id: user_id)
         raise '既に同じユーザーIDが登録されています'
