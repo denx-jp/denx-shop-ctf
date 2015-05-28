@@ -40,22 +40,21 @@ class ShopController < ApplicationController
     user_id = params[:user_id]
     password = params[:password]
     username = params[:username]
+    if user_id.blank? || password.blank? || username.blank?
+      raise 'ユーザーID，パスワード，ユーザー名のいずれかが入力されていません'
+    end
     if user_id.length > 30 || password.length > 30 || username.length > 30
       raise 'ユーザーID，パスワード，ユーザー名のいずれかが長すぎます（30文字以内にしてください）'
     end
     if user_id.match(/\w+/).nil?
       raise 'ユーザーIDに半角英数字以外の文字列が含まれています'
     end
-    if user_id.present? && password.present? && username.present?
-      if User.exists?(user_id: user_id)
-        raise '既に同じユーザーIDが登録されています'
-      end
-      User.create!(user_id: user_id, name: username, password: password)
-      flash[:info] = "ユーザーID: #{user_id}で登録に成功しました"
-      redirect_to :login
-    else
-      raise 'ユーザー登録失敗'
+    if User.exists?(user_id: user_id)
+      raise '既に同じユーザーIDが登録されています'
     end
+    User.create!(user_id: user_id, name: username, password: password)
+    flash[:info] = "ユーザーID: #{user_id}で登録に成功しました"
+    redirect_to :login
   rescue => ex
     flash[:error] = ex.message
     redirect_to :register
