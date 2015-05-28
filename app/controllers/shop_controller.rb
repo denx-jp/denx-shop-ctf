@@ -46,7 +46,7 @@ class ShopController < ApplicationController
     if user_id.length > 30 || password.length > 30 || username.length > 30
       raise 'ユーザーID，パスワード，ユーザー名のいずれかが長すぎます（30文字以内にしてください）'
     end
-    if user_id.match(/\w+/).nil?
+    if user_id.match(/\A\w+\z/).nil?
       raise 'ユーザーIDに半角英数字以外の文字列が含まれています'
     end
     if User.exists?(user_id: user_id)
@@ -79,7 +79,11 @@ class ShopController < ApplicationController
         end
       end
     end
-    @histories = History.order("created_at DESC")
+    @histories = History.order("created_at DESC").limit(100)
+  rescue
+    flash[:error] = 'エラーが発生しました'
+    @items = []
+    @histories = []
   end
 
   def do_buy
@@ -103,6 +107,7 @@ class ShopController < ApplicationController
   def user_page
     user_id = params[:user_id]
     @user = User.where(user_id: user_id).first
+    @histories = History.where(user_id: @user.user_id).order('created_at DESC').limit(100)
     redirect_to :index unless @user
   end
 

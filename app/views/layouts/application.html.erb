@@ -33,6 +33,7 @@
             <li><%= link_to "新規登録", "/register" %></li>
           <% end %>
           <% if @user %>
+            <li><%= link_to "マイページ", "/users/#{@user.user_id}" %></li>
             <p class="navbar-text navbar-right pull-right">
               ようこそ，<%= @user.name %>さん！ <%= link_to "ログアウト", "/logout" %>
             </p>

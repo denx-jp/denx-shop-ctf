@@ -21,6 +21,7 @@
     <% if @items.present? %>
     <ul class="media-list">
       <% @items.each do |item| %>
+        <% next if item["JanCode"].blank? %>
       <li class="media">
         <div class="media-left pull-left">
           <img class="media-object" src="<%= item["Image"]["Small"] %>">

@@ -1,1 +1,13 @@
 <h1><%= @user.name %>さんの購入履歴</h1>
+
+<table class="table table-striped">
+  <% @histories.each do |history| %>
+    <tr>
+      <td>
+        <img class="item-image" src="<%= history.item_image_url %>">
+        <%= link_to history.item_name, history.item_url %>
+        <%= tag_label number_to_currency(history.price, unit: '￥', precision: 0), :info %>
+      </td>
+    </tr>
+  <% end %>
+</table>
