@@ -1,0 +1,56 @@
+<style>
+  .item-description {
+    font-size: small;
+    color: #888;
+  }
+</style>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="page-header">
+      <h1>商品検索</h1>
+    </div>
+
+    <%= bootstrap_form_tag url: search_path, method: 'GET' do |f| %>
+      <%= f.search_field :keyword, label: 'キーワード', value: params[:keyword] %>
+      <%= f.form_group do %>
+        <%= f.submit "検索", class: 'btn btn-primary' %>
+      <% end %>
+    <% end %>
+
+    <% if @items.present? %>
+    <ul class="media-list">
+      <% @items.each do |item| %>
+      <li class="media">
+        <div class="media-left pull-left">
+          <img class="media-object" src="<%= item["Image"]["Small"] %>">
+        </div>
+        <div class="media-body">
+          <h4 class="media-heading" style="padding: 0.4em 0; white-space: nowrap; text-overflow: ellipsis;">
+            <% if @user %>
+                <%= link_to '購入', "/buy/#{item["JanCode"]}", method: 'POST', class: 'btn btn-success' %>
+          <% end %>
+            <%= tag_label number_to_currency(item["Price"]["_value"], unit: '￥', precision: 0), :info %>
+            <%= item["Name"] %></h4>
+          <span class="item-description"><%= item["Description"] %></span>
+        </div>
+      </li>
+      <% end %>
+    </ul>
+    <% end %>
+  </div>
+
+  <div class="col-md-6">
+    <div class="page-header">
+      <h1>みんなの購入履歴</h1>
+    </div>
+    <table class="table table-striped">
+      <% @histories.each do |history| %>
+        <tr>
+          <td><img class="item-image" src="<%= history.item_image_url %>"><%= link_to history.username, "/users/#{history.user_id}" %>さんが<%= link_to history.item_name, history.item_url %>を<%= number_to_currency(history.price, unit: '￥', precision: 0) %>で購入しました！
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

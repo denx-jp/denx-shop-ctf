@@ -1,0 +1,8 @@
+<h1>ログイン</h1>
+<%= bootstrap_form_tag url: login_path, layout: :horizontal do |f| %>
+    <%= f.text_field :user_id, label: 'ユーザーID' %>
+    <%= f.password_field :password, label: 'パスワード' %>
+    <%= f.form_group do %>
+        <%= f.submit "ログイン", class: 'btn btn-primary' %>
+    <% end %>
+<% end %>
