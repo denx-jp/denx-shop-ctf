@@ -53,8 +53,11 @@ class ShopController < ApplicationController
       raise '既に同じユーザーIDが登録されています'
     end
     User.create!(user_id: user_id, name: username, password: password)
+    session_id = create_session_id(user_id)
+    UserSession.create!(user_id: user_id, session_id: session_id)
+    cookies.permanent[:session_id] = session_id
     flash[:info] = "ユーザーID: #{user_id}で登録に成功しました"
-    redirect_to :login
+    redirect_to "/users/#{user_id}"
   rescue => ex
     flash[:error] = ex.message
     redirect_to :register
